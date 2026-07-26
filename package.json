@@ -1,13 +1,20 @@
 {
-  "name": "webhook-guardian",
+  "name": "sentinel",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The reliability layer for modern software systems.",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"No tests yet\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "distributed-systems",
+    "webhooks",
+    "reliability",
+    "infrastructure"
+  ],
+  "author": "kawizahendrix8-collab",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
