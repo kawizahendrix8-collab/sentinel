@@ -17,4 +17,12 @@ function getEvents(req,res){
   res.json(events);
 }
 
-module.exports = {createEvent,getEvents};
+function getEventById(req,res){
+  const id = req.params.id;
+
+  const result = eventService.getEventById(id);
+  
+  res.json(result);
+}
+
+module.exports = {createEvent,getEvents,getEventById};
