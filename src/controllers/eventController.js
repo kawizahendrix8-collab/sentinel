@@ -1,3 +1,4 @@
+const eventProcessor = require("../services/eventProcessor.js");
 
 const eventService = require("../services/eventService.js");
 
@@ -25,4 +26,15 @@ function getEventById(req,res){
   res.json(result);
 }
 
-module.exports = {createEvent,getEvents,getEventById};
+
+
+function processEvent(req,res){
+  const id = req.params.id;
+  
+  const result = eventProcessor.processEvent(id);
+
+  res.json(result);
+    
+}
+
+module.exports = {createEvent,getEvents,getEventById,processEvent};
