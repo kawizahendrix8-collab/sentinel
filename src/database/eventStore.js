@@ -8,7 +8,7 @@ function getAllEvents() {
   return events;
 }
 
-function updateEvent(id, status) {
+function updateEvent(id, updates) {
 
   const index = events.findIndex(function(event) {
     return event.id === id;
@@ -23,7 +23,8 @@ function updateEvent(id, status) {
 
   const event = events[index];
 
-  event.status = status;
+  event.status = updates.status;
+  event.retryCount = updates.retryCount;
   return { success: true, data: event };
 }
 

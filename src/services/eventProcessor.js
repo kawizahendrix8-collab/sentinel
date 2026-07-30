@@ -1,13 +1,25 @@
-
+const eventService = require("./eventService.js");
 const eventStore = require("../database/eventStore.js");
 
 function processEvent(id) {
+  const result = eventService.getEventById(id);
 
-  eventStore.updateEvent(id, "processing")
+  if (!result.success) {
+    return { success: false, message: "Event not found" };
+  }
 
+  if (result.data.payload.simulateFailure === true) {
+    const newRetryCount = result.data.retryCount + 1;
 
-  return eventStore.updateEvent(id,"completed")
-  
+    if (newRetryCount >= result.data.maxRetries) {
+      return eventStore.updateEvent(id, { status: "permanently_failed", retryCount: newRetryCount });
+    } else {
+      return eventStore.updateEvent(id, { status: "retrying", retryCount: newRetryCount });
+    }
+  } else {
+    eventStore.updateEvent(id, { status: "processing" });
+    return eventStore.updateEvent(id, { status: "completed" });
+  }
 }
 
 module.exports = { processEvent };

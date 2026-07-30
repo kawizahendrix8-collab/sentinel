@@ -29,6 +29,8 @@ return {
     source: data.source,
     type: data.type,
     payload: data.payload,
+    retryCount: 0,
+    maxRetries: 3,
     status: "received",
     receivedAt: new Date()
   };
