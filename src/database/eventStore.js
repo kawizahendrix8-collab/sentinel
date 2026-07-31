@@ -24,10 +24,12 @@ function updateEvent(id, updates) {
   const event = events[index];
 
   event.status = updates.status;
+if (updates.retryCount !== undefined) {
   event.retryCount = updates.retryCount;
-  return { success: true, data: event };
 }
+  return { success: true, data: event };
 
+}
 
 
 module.exports = { addEvent, getAllEvents ,updateEvent};
