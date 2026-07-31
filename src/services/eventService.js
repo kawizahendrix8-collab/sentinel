@@ -1,4 +1,6 @@
 
+const eventLogger = require("./eventLogger.js");
+
 const eventStore = require("../database/eventStore.js");
 
 function createEvent(data) {
@@ -31,11 +33,13 @@ return {
     payload: data.payload,
     retryCount: 0,
     maxRetries: 3,
+    history: [],
     status: "received",
     receivedAt: new Date()
   };
   
   eventStore.addEvent(newEvent);
+  eventLogger.logHistory(newEvent, "Event received");
 
   return newEvent;
 };
@@ -63,4 +67,23 @@ const foundEvent = events.find(function(event) {
   }
 
 
-module.exports = { createEvent, getEvents,getEventById };
+  function getEventHistory(id) {
+    
+  
+  const result = getEventById(id);
+
+    if(!result.success){
+      return {
+        success: false,
+        message: "Event not found" 
+      };
+    } else {
+  return {
+    success: true,
+    data: result.data.history 
+  };
+    }
+}
+
+
+module.exports = { createEvent, getEvents, getEventById, getEventHistory };

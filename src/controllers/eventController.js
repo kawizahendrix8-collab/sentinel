@@ -37,4 +37,14 @@ function processEvent(req,res){
     
 }
 
-module.exports = {createEvent,getEvents,getEventById,processEvent};
+function getEventHistory(req,res){
+
+  const id = req.params.id;
+
+  const result = eventService.getEventHistory(id);
+
+  res.json(result);
+  
+}
+
+module.exports = {createEvent,getEvents,getEventById,processEvent,getEventHistory};
