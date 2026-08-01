@@ -3,27 +3,17 @@ const eventLogger = require("./eventLogger.js");
 
 const eventStore = require("../database/eventStore.js");
 
-function createEvent(data) {
-  
+  async function createEvent(data) {
   if (!data.source) {
-return {
-  "success": false,
-  "message": "source is required"
-}  
+    return { "success": false, "message": "source is required" };
   }
 
-  if(!data.type){
-    return  {
-      "success":false,
-      "message":"type is required"
-    }
-  } 
+  if (!data.type) {
+    return { "success": false, "message": "type is required" };
+  }
 
-  if(!data.payload) {
-    return {
-      "success":false,
-      "message":"payload is required"
-    }
+  if (!data.payload) {
+    return { "success": false, "message": "payload is required" };
   }
 
   const newEvent = {
@@ -37,22 +27,22 @@ return {
     status: "received",
     receivedAt: new Date()
   };
-  
-  eventStore.addEvent(newEvent);
+
   eventLogger.logHistory(newEvent, "Event received");
+  await eventStore.addEvent(newEvent);
 
   return newEvent;
-};
+} 
 
-function getEvents() {
-  return eventStore.getAllEvents();
+ async  function getEvents() {
+  return  await eventStore.getAllEvents();
 }
 
-function getEventById(id) {
+ async  function getEventById(id) {
   
-const events = eventStore.getAllEvents();
+const events = await eventStore.getAllEvents();
 
-const foundEvent = events.find(function(event) {
+const foundEvent =              events.find(function(event) {
   return event.id === id;
 });
 
@@ -67,10 +57,10 @@ const foundEvent = events.find(function(event) {
   }
 
 
-  function getEventHistory(id) {
+ async function getEventHistory(id) {
     
   
-  const result = getEventById(id);
+  const result = await getEventById(id);
 
     if(!result.success){
       return {

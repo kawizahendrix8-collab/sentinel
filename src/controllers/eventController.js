@@ -2,46 +2,47 @@ const eventProcessor = require("../services/eventProcessor.js");
 
 const eventService = require("../services/eventService.js");
 
-function createEvent(req, res) {
+  async function createEvent(req, res) {
   const data = req.body;
   
-  const newEvent = eventService.createEvent(data);
+  const newEvent = await eventService.createEvent(data);
 
   res.status(201).json(newEvent);
 
 };
 
-function getEvents(req,res){
+    async function getEvents(req,res){
   
-  const events = eventService.getEvents()
+  const events = await
+    eventService.getEvents()
 
   res.json(events);
 }
 
-function getEventById(req,res){
+ async function getEventById(req,res){
   const id = req.params.id;
 
-  const result = eventService.getEventById(id);
+  const result =  await   eventService.getEventById(id);
   
   res.json(result);
 }
 
 
 
-function processEvent(req,res){
+ async function processEvent(req,res){
   const id = req.params.id;
   
-  const result = eventProcessor.processEvent(id);
+  const result = await eventProcessor.processEvent(id);
 
   res.json(result);
     
 }
 
-function getEventHistory(req,res){
+ async function getEventHistory(req,res){
 
   const id = req.params.id;
 
-  const result = eventService.getEventHistory(id);
+  const result = await eventService.getEventHistory(id);
 
   res.json(result);
   
