@@ -1,0 +1,15 @@
+2026-08-02 18:31:18.480 CAT [14421] LOG:  starting PostgreSQL 18.2 on arm-unknown-linux-androideabi, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 32-bit
+2026-08-02 18:31:18.483 CAT [14421] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-02 18:31:18.489 CAT [14421] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-08-02 18:31:18.679 CAT [14431] LOG:  database system was interrupted; last known up at 2026-08-01 20:01:39 CAT
+2026-08-02 18:31:19.130 CAT [14431] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-08-02 18:31:19.139 CAT [14431] LOG:  redo starts at 0/1BEBE60
+2026-08-02 18:31:19.139 CAT [14431] LOG:  invalid record length at 0/1BEBF68: expected at least 24, got 0
+2026-08-02 18:31:19.139 CAT [14431] LOG:  redo done at 0/1BEBF30 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-08-02 18:31:19.154 CAT [14429] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-08-02 18:31:19.174 CAT [14429] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.002 s, total=0.022 s; sync files=2, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1BEBF68, redo lsn=0/1BEBF68
+2026-08-02 18:31:19.184 CAT [14421] LOG:  database system is ready to accept connections
+2026-08-02 18:36:19.299 CAT [14429] LOG:  checkpoint starting: time
+2026-08-02 18:36:23.233 CAT [14429] LOG:  checkpoint complete: wrote 31 buffers (0.2%), wrote 1 SLRU buffers; 1 WAL file(s) added, 0 removed, 0 recycled; write=3.298 s, sync=0.093 s, total=3.944 s; sync files=32, longest=0.008 s, average=0.003 s; distance=151 kB, estimate=151 kB; lsn=0/1C11F30, redo lsn=0/1C11ED8
+2026-08-02 18:41:19.347 CAT [14429] LOG:  checkpoint starting: time
+2026-08-02 18:41:19.974 CAT [14429] LOG:  checkpoint complete: wrote 5 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.532 s, sync=0.011 s, total=0.635 s; sync files=4, longest=0.005 s, average=0.003 s; distance=0 kB, estimate=136 kB; lsn=0/1C122C0, redo lsn=0/1C12268
