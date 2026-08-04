@@ -3,7 +3,7 @@ const eventLogger = require("./eventLogger.js");
 
 const eventStore = require("../database/eventStore.js");
 
-  async function createEvent(data) {
+  async function createEvent(data,projectId) {
   if (!data.source) {
     return { "success": false, "message": "source is required" };
   }
@@ -22,6 +22,7 @@ const eventStore = require("../database/eventStore.js");
     type: data.type,
     payload: data.payload,
     retryCount: 0,
+    projectId: projectId,
     maxRetries: 3,
     history: [],
     status: "received",

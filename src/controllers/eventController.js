@@ -3,9 +3,12 @@ const eventProcessor = require("../services/eventProcessor.js");
 const eventService = require("../services/eventService.js");
 
   async function createEvent(req, res) {
+
+    
   const data = req.body;
-  
-  const newEvent = await eventService.createEvent(data);
+  const projectId = req.project.id;
+    
+  const newEvent = await eventService.createEvent(data,projectId);
 
   res.status(201).json(newEvent);
 

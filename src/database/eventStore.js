@@ -9,6 +9,7 @@ function toCamelCase(row) {
     type: row.type,
     status: row.status,
     retryCount: row.retry_count,
+    projectId: row.project_id,
     maxRetries: row.max_retries,
     payload: row.payload,
     history: row.history,
@@ -19,9 +20,9 @@ function toCamelCase(row) {
 async function addEvent(event) {
   try {
     await pool.query(`
-      INSERT INTO events (id, source, type, status, retry_count, max_retries, payload, history, received_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-    `, [event.id, event.source, event.type, event.status, event.retryCount, event.maxRetries, JSON.stringify(event.payload), JSON.stringify(event.history), event.receivedAt]);
+      INSERT INTO events (id, source, type, status, retry_count, project_id,max_retries, payload, history, received_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
+    `, [event.id, event.source, event.type, event.status, event.retryCount,event.projectId, event.maxRetries, JSON.stringify(event.payload), JSON.stringify(event.history), event.receivedAt]);
   } catch (err) {
     console.log(err);
   }

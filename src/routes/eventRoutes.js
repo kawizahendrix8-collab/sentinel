@@ -7,7 +7,8 @@ const {createEvent,getEvents,getEventById,processEvent,getEventHistory} = requir
 
 const verifyToken = require("../middleware/authMiddleware.js");
 
-router.post("/",createEvent);
+const verifyApiKey = require("../middleware/apiKeyMiddleware.js");
+router.post("/", verifyApiKey, createEvent);
 router.get("/", verifyToken, getEvents);
 router.get("/:id",getEventById);
 router.post("/:id/process", processEvent);
