@@ -55,4 +55,4 @@ async function updateEvent(id, updates) {
   }
 }
 
-module.exports = { addEvent, getAllEvents, updateEvent };
+module.exports = { addEvent, getAllEvents, updateEvent,toCamelCase };

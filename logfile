@@ -41,3 +41,16 @@
 2026-08-03 23:23:37.215 CAT [22618] LOG:  checkpoint complete: wrote 3 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.320 s, sync=0.003 s, total=0.382 s; sync files=3, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1C39EB0, redo lsn=0/1C39C00
 2026-08-03 23:28:36.315 CAT [22618] LOG:  checkpoint starting: time
 2026-08-03 23:28:36.571 CAT [22618] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.225 s, sync=0.004 s, total=0.258 s; sync files=3, longest=0.002 s, average=0.002 s; distance=1 kB, estimate=1 kB; lsn=0/1C3A138, redo lsn=0/1C3A0E0
+2026-08-05 21:23:06.953 CAT [23152] LOG:  starting PostgreSQL 18.2 on arm-unknown-linux-androideabi, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 32-bit
+2026-08-05 21:23:06.960 CAT [23152] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-05 21:23:06.980 CAT [23152] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-08-05 21:23:07.140 CAT [23162] LOG:  database system was interrupted; last known up at 2026-08-04 22:13:49 CAT
+2026-08-05 21:23:09.331 CAT [23162] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-08-05 21:23:09.341 CAT [23162] LOG:  redo starts at 0/1C40A28
+2026-08-05 21:23:09.341 CAT [23162] LOG:  invalid record length at 0/1C40B30: expected at least 24, got 0
+2026-08-05 21:23:09.342 CAT [23162] LOG:  redo done at 0/1C40AF8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-08-05 21:23:09.365 CAT [23160] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-08-05 21:23:09.392 CAT [23160] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.028 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB; lsn=0/1C40B30, redo lsn=0/1C40B30
+2026-08-05 21:23:09.399 CAT [23152] LOG:  database system is ready to accept connections
+2026-08-05 21:28:09.501 CAT [23160] LOG:  checkpoint starting: time
+2026-08-05 21:28:09.770 CAT [23160] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.221 s, sync=0.004 s, total=0.276 s; sync files=3, longest=0.002 s, average=0.002 s; distance=8 kB, estimate=8 kB; lsn=0/1C42E58, redo lsn=0/1C42E00
