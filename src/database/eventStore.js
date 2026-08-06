@@ -28,8 +28,53 @@ async function addEvent(event) {
   }
 }
 
-async function getAllEvents() {
-  const result = await pool.query(`SELECT * FROM events`);
+async function getAllEvents(filters) {
+  let conditions = [];
+  let values = [];
+
+  if (filters.status) {
+    values.push(filters.status);
+    conditions.push(`status = $${values.length}`);
+  }
+
+  if (filters.source) {
+    values.push(filters.source);
+    conditions.push(`source = $${values.length}`);
+  }
+
+  if (filters.type) {
+    values.push(filters.type);
+    conditions.push(`type = $${values.length}`);
+  }
+
+  if (filters.projectId) {
+    values.push(filters.projectId);
+    conditions.push(`project_id = $${values.length}`);
+  }
+
+  let query = `SELECT * FROM events`;
+
+  if (conditions.length > 0) {
+    query += ` WHERE ` + conditions.join(" AND ");
+  }
+
+  if (filters.sort === "oldest") {
+  query += ` ORDER BY received_at ASC`;
+} else {
+  query += ` ORDER BY received_at DESC`;
+}
+
+  if (filters.limit) {
+  values.push(filters.limit);
+  query += ` LIMIT $${values.length}`;
+}
+
+if (filters.offset) {
+  values.push(filters.offset);
+  query += ` OFFSET $${values.length}`;
+}
+
+  const result = await pool.query(query, values);
   return result.rows.map(toCamelCase);
 }
 

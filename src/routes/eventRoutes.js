@@ -8,8 +8,11 @@ const {createEvent,getEvents,getEventById,processEvent,getEventHistory} = requir
 const verifyToken = require("../middleware/authMiddleware.js");
 
 const verifyApiKey = require("../middleware/apiKeyMiddleware.js");
+
+const { getEvents: getFilteredEvents } = require("../controllers/eventQueryController.js");
+
 router.post("/", verifyApiKey, createEvent);
-router.get("/", verifyToken, getEvents);
+router.get("/", verifyToken, getFilteredEvents);
 router.get("/:id",getEventById);
 router.post("/:id/process", processEvent);
 router.get("/:id/history", getEventHistory);
