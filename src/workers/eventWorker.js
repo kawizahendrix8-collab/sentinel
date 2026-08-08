@@ -1,7 +1,6 @@
 const eventService = require("../services/eventService.js");
 const { Worker } = require("bullmq");
 
-
 const eventProcessor = require("../services/eventProcessor.js");
 
 const worker = new Worker(
@@ -13,11 +12,14 @@ const worker = new Worker(
     const result = await eventService.getEventById(eventId);
 
     if (!result.success) {
-  throw new Error("Event not found");
-      }
+      throw new Error("Event not found");
+    }
 
-      await eventProcessor.processEvent(eventId);
-    
+    const processResult = await eventProcessor.processEvent(eventId);
+
+    if (processResult.data.status === "retrying") {
+      throw new Error("Event processing failed, retrying");
+    }
 
   },
   {

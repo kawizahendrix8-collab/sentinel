@@ -33,13 +33,13 @@ const eventStore = require("../database/eventStore.js");
   eventLogger.logHistory(newEvent, "Event received");
   await eventStore.addEvent(newEvent);
 
-    await eventQueue.add("process-event", { eventId: newEvent.id });
+    await eventQueue.add("process-event", { eventId: newEvent.id }, { attempts: 3, backoff: { type: "fixed", delay: 2000 } });
 
   return newEvent;
 } 
 
- async  function getEvents() {
-  return  await eventStore.getAllEvents();
+ async function getEvents() {
+  return await eventStore.getAllEvents({});
 }
 
  async  function getEventById(id) {
