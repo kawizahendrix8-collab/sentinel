@@ -1,3 +1,4 @@
+require("./workers/eventWorker.js");
 
 const express = require("express");
 

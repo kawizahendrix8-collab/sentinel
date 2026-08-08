@@ -65,3 +65,16 @@
 2026-08-06 21:54:27.309 CAT [4552] LOG:  checkpoint starting: end-of-recovery immediate wait
 2026-08-06 21:54:27.330 CAT [4552] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.003 s, total=0.022 s; sync files=2, longest=0.002 s, average=0.002 s; distance=0 kB, estimate=0 kB; lsn=0/1C42F08, redo lsn=0/1C42F08
 2026-08-06 21:54:27.336 CAT [4519] LOG:  database system is ready to accept connections
+2026-08-08 18:14:08.298 CAT [7063] LOG:  starting PostgreSQL 18.2 on arm-unknown-linux-androideabi, compiled by Android (13989888, +pgo, +bolt, +lto, +mlgo, based on r563880c) clang version 21.0.0 (https://android.googlesource.com/toolchain/llvm-project 5e96669f06077099aa41290cdb4c5e6fa0f59349), 32-bit
+2026-08-08 18:14:08.301 CAT [7063] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-08 18:14:08.309 CAT [7063] LOG:  listening on Unix socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432"
+2026-08-08 18:14:08.467 CAT [7071] LOG:  database system was interrupted; last known up at 2026-08-06 21:54:27 CAT
+2026-08-08 18:14:08.964 CAT [7071] LOG:  database system was not properly shut down; automatic recovery in progress
+2026-08-08 18:14:08.971 CAT [7071] LOG:  redo starts at 0/1C42F80
+2026-08-08 18:14:08.972 CAT [7071] LOG:  invalid record length at 0/1C42FB8: expected at least 24, got 0
+2026-08-08 18:14:08.972 CAT [7071] LOG:  redo done at 0/1C42F80 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-08-08 18:14:08.986 CAT [7069] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-08-08 18:14:09.007 CAT [7069] LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.002 s, total=0.022 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1C42FB8, redo lsn=0/1C42FB8
+2026-08-08 18:14:09.014 CAT [7063] LOG:  database system is ready to accept connections
+2026-08-08 18:19:08.106 CAT [7069] LOG:  checkpoint starting: time
+2026-08-08 18:19:08.356 CAT [7069] LOG:  checkpoint complete: wrote 2 buffers (0.0%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.215 s, sync=0.004 s, total=0.251 s; sync files=3, longest=0.002 s, average=0.002 s; distance=4 kB, estimate=4 kB; lsn=0/1C44188, redo lsn=0/1C44130

@@ -1,3 +1,4 @@
+const eventQueue = require("../queue/eventQueue.js");
 
 const eventLogger = require("./eventLogger.js");
 
@@ -32,6 +33,8 @@ const eventStore = require("../database/eventStore.js");
   eventLogger.logHistory(newEvent, "Event received");
   await eventStore.addEvent(newEvent);
 
+    await eventQueue.add("process-event", { eventId: newEvent.id });
+
   return newEvent;
 } 
 
@@ -41,8 +44,8 @@ const eventStore = require("../database/eventStore.js");
 
  async  function getEventById(id) {
   
-const events = await eventStore.getAllEvents();
-
+const events = await eventStore.getAllEvents({});
+   
 const foundEvent =              events.find(function(event) {
   return event.id === id;
 });
