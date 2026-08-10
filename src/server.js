@@ -12,6 +12,8 @@ const projectRoutes = require("./routes/projectRoutes.js");
 
 const dashboardRoutes = require("./routes/dashboardRoutes.js");
 
+const webhookRoutes = require("./routes/webhookRoutes.js");
+
 
 
 app.use(express.json());
@@ -19,6 +21,7 @@ app.use("/events", eventRoutes);
 app.use("/auth", authRoutes);
 app.use("/projects", projectRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/webhooks", webhookRoutes);
 
 app.listen(3000, () => {
   console.log("we are online");

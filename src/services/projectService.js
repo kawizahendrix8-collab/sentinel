@@ -13,12 +13,14 @@ async function createProject(data, userId) {
 
   const id = "proj_" + Date.now();
   const apiKey = crypto.randomBytes(32).toString("hex");
-
+const webhookSecret = "whsec_" + crypto.randomBytes(32).toString("hex");
+  
   const newProject = {
     id: id,
     userId: userId,
     name: data.name,
     apiKey: apiKey,
+    webhookSecret: webhookSecret,
     createdAt: new Date()
   };
 
@@ -27,9 +29,19 @@ async function createProject(data, userId) {
 
 
 async function getProjects(userId) {
-  return await projectStore.getProjectsByUserId(userId);
-}
+  const projects = await projectStore.getProjectsByUserId(userId);
 
+  return projects.map(function(project) {
+    return {
+      id: project.id,
+      userId: project.userId,
+      name: project.name,
+      apiKey: maskSecret(project.apiKey),
+      webhookSecret: maskSecret(project.webhookSecret),
+      createdAt: project.createdAt
+    };
+  });
+}
 
 async function getProjectById(id, userId) {
   const result = await projectStore.findProjectById(id);
@@ -42,8 +54,27 @@ async function getProjectById(id, userId) {
     return { success: false, message: "Not authorized to view this project" };
   }
 
-  return result;
+  return {
+    success: true,
+    data: {
+      id: result.data.id,
+      userId: result.data.userId,
+      name: result.data.name,
+      apiKey: maskSecret(result.data.apiKey),
+      webhookSecret: maskSecret(result.data.webhookSecret),
+      createdAt: result.data.createdAt
+    }
+  };
 }
 
+function maskSecret(secret) {
+  if (!secret) {
+    return null;
+  }
 
-module.exports = { createProject, getProjects, getProjectById };
+  const lastFour = secret.slice(-4);
+
+  return "••••••••" + lastFour;
+}
+
+module.exports = { createProject, getProjects, getProjectById,maskSecret };

@@ -24,6 +24,7 @@ const eventStore = require("../database/eventStore.js");
     payload: data.payload,
     retryCount: 0,
     projectId: projectId,
+    providerEventId: data.providerEventId,
     maxRetries: 3,
     history: [],
     status: "received",
@@ -38,9 +39,9 @@ const eventStore = require("../database/eventStore.js");
   return newEvent;
 } 
 
- async function getEvents() {
-  return await eventStore.getAllEvents({});
-}
+ async function getEvents(filters = {}) {
+  return await eventStore.getAllEvents(filters);
+ }
 
  async  function getEventById(id) {
   

@@ -1,7 +1,5 @@
 const pool = require("./db.js");
 
-
-
 function toCamelCase(row) {
   return {
     id: row.id,
@@ -13,16 +11,17 @@ function toCamelCase(row) {
     maxRetries: row.max_retries,
     payload: row.payload,
     history: row.history,
-    receivedAt: row.received_at
+    receivedAt: row.received_at,
+    providerEventId: row.provider_event_id
   };
 }
 
 async function addEvent(event) {
   try {
     await pool.query(`
-      INSERT INTO events (id, source, type, status, retry_count, project_id,max_retries, payload, history, received_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
-    `, [event.id, event.source, event.type, event.status, event.retryCount,event.projectId, event.maxRetries, JSON.stringify(event.payload), JSON.stringify(event.history), event.receivedAt]);
+      INSERT INTO events (id, source, type, status, retry_count, project_id, max_retries, payload, history, received_at, provider_event_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+    `, [event.id, event.source, event.type, event.status, event.retryCount, event.projectId, event.maxRetries, JSON.stringify(event.payload), JSON.stringify(event.history), event.receivedAt, event.providerEventId]);
   } catch (err) {
     console.log(err);
   }
@@ -52,6 +51,11 @@ async function getAllEvents(filters) {
     conditions.push(`project_id = $${values.length}`);
   }
 
+  if (filters.providerEventId) {
+    values.push(filters.providerEventId);
+    conditions.push(`provider_event_id = $${values.length}`);
+  }
+
   let query = `SELECT * FROM events`;
 
   if (conditions.length > 0) {
@@ -59,20 +63,20 @@ async function getAllEvents(filters) {
   }
 
   if (filters.sort === "oldest") {
-  query += ` ORDER BY received_at ASC`;
-} else {
-  query += ` ORDER BY received_at DESC`;
-}
+    query += ` ORDER BY received_at ASC`;
+  } else {
+    query += ` ORDER BY received_at DESC`;
+  }
 
   if (filters.limit) {
-  values.push(filters.limit);
-  query += ` LIMIT $${values.length}`;
-}
+    values.push(filters.limit);
+    query += ` LIMIT $${values.length}`;
+  }
 
-if (filters.offset) {
-  values.push(filters.offset);
-  query += ` OFFSET $${values.length}`;
-}
+  if (filters.offset) {
+    values.push(filters.offset);
+    query += ` OFFSET $${values.length}`;
+  }
 
   const result = await pool.query(query, values);
   return result.rows.map(toCamelCase);
@@ -100,4 +104,4 @@ async function updateEvent(id, updates) {
   }
 }
 
-module.exports = { addEvent, getAllEvents, updateEvent,toCamelCase };
+module.exports = { addEvent, getAllEvents, updateEvent, toCamelCase };

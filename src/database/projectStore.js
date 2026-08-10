@@ -6,6 +6,7 @@ function toCamelCase(row) {
     userId: row.user_id,
     name: row.name,
     apiKey: row.api_key,
+    webhookSecret: row.webhook_secret,
     createdAt: row.created_at
   };
 }
@@ -13,8 +14,8 @@ function toCamelCase(row) {
 async function createProject(project) {
   try {
     const result = await pool.query(
-      `INSERT INTO projects (id, user_id, name, api_key, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [project.id, project.userId, project.name, project.apiKey, project.createdAt]
+      `INSERT INTO projects (id, user_id, name, api_key, webhook_secret, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [project.id, project.userId, project.name, project.apiKey, project.webhookSecret, project.createdAt]
     );
     return { success: true, data: toCamelCase(result.rows[0]) };
   } catch (err) {
@@ -22,7 +23,6 @@ async function createProject(project) {
     return { success: false, message: "Could not create project" };
   }
 }
-
 async function findProjectById(id) {
   const result = await pool.query(`SELECT * FROM projects WHERE id = $1`, [id]);
 
