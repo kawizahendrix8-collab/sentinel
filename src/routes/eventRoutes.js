@@ -11,7 +11,9 @@ const verifyApiKey = require("../middleware/apiKeyMiddleware.js");
 
 const { getEvents: getFilteredEvents } = require("../controllers/eventQueryController.js");
 
-router.post("/", verifyApiKey, createEvent);
+const validateRequest = require("../middleware/validateRequest.js");
+
+router.post("/", verifyApiKey, validateRequest(["source", "type", "payload"]), createEvent);
 router.get("/", verifyToken, getFilteredEvents);
 router.get("/:id",getEventById);
 router.post("/:id/process", processEvent);
