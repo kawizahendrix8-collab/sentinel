@@ -13,7 +13,12 @@ const notificationRoutes = require("./routes/notificationRoutes.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
 const rateLimiter = require("./middleware/rateLimiter.js");
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
+const paymentRoutes =
+  require("./routes/paymentRoutes");
 
+const pesapalRoutes =
+  require("./routes/pesapalRoutes");
 
 app.use(express.json());
 app.use("/events", eventRoutes);
@@ -21,6 +26,13 @@ app.use("/auth", authRoutes);
 app.use("/projects", projectRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/webhooks", webhookRoutes);
+app.use("/subscriptions", subscriptionRoutes);
+app.use("/payments", paymentRoutes);
+
+app.use(
+  "/billing/pesapal",
+  pesapalRoutes
+);
 app.use("/notifications", notificationRoutes);
 app.use(rateLimiter);
 app.use(errorHandler);
