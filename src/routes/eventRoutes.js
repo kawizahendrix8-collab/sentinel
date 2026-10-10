@@ -15,8 +15,8 @@ const validateRequest = require("../middleware/validateRequest.js");
 
 router.post("/", verifyApiKey, validateRequest(["source", "type", "payload"]), createEvent);
 router.get("/", verifyToken, getFilteredEvents);
-router.get("/:id",getEventById);
-router.post("/:id/process", processEvent);
-router.get("/:id/history", getEventHistory);
+router.get("/:id", verifyApiKey, getEventById);
+router.post("/:id/process", verifyApiKey, processEvent);
+router.get("/:id/history", verifyApiKey, getEventHistory);
 
 module.exports = router;

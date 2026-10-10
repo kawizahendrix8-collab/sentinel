@@ -12,6 +12,13 @@ async function createNotification(data, userId) {
   if (!data.type) {
     return { success: false, message: "type is required" };
   }
+
+  if (!["email", "webhook"].includes(data.type)) {
+    return {
+      success: false,
+      message: "type must be email or webhook"
+    };
+  }
   if (!data.destination) {
     return { success: false, message: "destination is required" };
   }
@@ -87,10 +94,26 @@ async function triggerFailureNotifications(event, project) {
 
     let result;
 
-    if (notification.type === "email") {
-      result = await emailService.sendFailureEmail(notification.destination, event, project);
-    } else if (notification.type === "webhook") {
-      result = await webhookNotificationService.sendFailureWebhook(notification.destination, event, project);
+    try {
+      if (notification.type === "email") {
+        result = await emailService.sendFailureEmail(
+          notification.destination, event, project
+        );
+      } else if (notification.type === "webhook") {
+        result = await webhookNotificationService.sendFailureWebhook(
+          notification.destination, event, project
+        );
+      } else {
+        result = {
+          success: false,
+          message: "Unsupported notification channel"
+        };
+      }
+    } catch (error) {
+      result = {
+        success: false,
+        message: error.message || "Notification delivery failed"
+      };
     }
 
     const delivery = {
@@ -104,8 +127,8 @@ async function triggerFailureNotifications(event, project) {
 
     try {
       await notificationStore.recordDelivery(delivery);
-    } catch (err) {
-      console.log("Failed to record delivery:", err.message);
+    } catch (error) {
+      console.error("Failed to record notification delivery:", error.message);
     }
   }
 }

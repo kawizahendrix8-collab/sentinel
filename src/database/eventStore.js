@@ -18,12 +18,41 @@ function toCamelCase(row) {
 
 async function addEvent(event) {
   try {
-    await pool.query(`
+    const result = await pool.query(`
       INSERT INTO events (id, source, type, status, retry_count, project_id, max_retries, payload, history, received_at, provider_event_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-    `, [event.id, event.source, event.type, event.status, event.retryCount, event.projectId, event.maxRetries, JSON.stringify(event.payload), JSON.stringify(event.history), event.receivedAt, event.providerEventId]);
+      RETURNING *
+    `, [
+      event.id,
+      event.source,
+      event.type,
+      event.status,
+      event.retryCount,
+      event.projectId,
+      event.maxRetries,
+      JSON.stringify(event.payload),
+      JSON.stringify(event.history),
+      event.receivedAt,
+      event.providerEventId
+    ]);
+
+    return { success: true, data: toCamelCase(result.rows[0]) };
   } catch (err) {
     console.log(err);
+
+    if (err.code === "23505") {
+      return {
+        success: false,
+        code: "DUPLICATE_EVENT",
+        message: "Event already exists"
+      };
+    }
+
+    return {
+      success: false,
+      code: "EVENT_CREATE_FAILED",
+      message: "Could not create event"
+    };
   }
 }
 

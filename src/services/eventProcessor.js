@@ -4,40 +4,56 @@ const eventStore = require("../database/eventStore.js");
 const notificationService = require("./notificationService.js");
 const projectStore = require("../database/projectStore.js");
 
-async function processEvent(id) {
+async function processEvent(id, attemptNumber, maxAttempts) {
   const result = await eventService.getEventById(id);
 
   if (!result.success) {
-    return { success: false, message: "Event not found" };
+    throw new Error("Event not found");
   }
 
-  if (result.data.payload.simulateFailure === true) {
-    const newRetryCount = result.data.retryCount + 1;
+  const event = result.data;
 
-    eventLogger.logHistory(result.data, "Processing failed");
+  try {
+    eventLogger.logHistory(event, "Processing started");
 
-    if (newRetryCount >= result.data.maxRetries) {
-      const updateResult = await eventStore.updateEvent(id, { status: "permanently_failed", retryCount: newRetryCount, history: result.data.history });
+    eventLogger.logHistory(event, "Processing completed");
 
-      const project = await projectStore.findProjectById(result.data.projectId);
+    return await eventStore.updateEvent(id, {
+      status: "completed",
+      history: event.history
+    });
+  } catch (error) {
+    eventLogger.logHistory(event, "Processing failed");
+
+    const finalAttempt = attemptNumber >= maxAttempts;
+
+    await eventStore.updateEvent(id, {
+      status: finalAttempt ? "permanently_failed" : "retrying",
+      retryCount: attemptNumber,
+      history: event.history
+    });
+
+    if (finalAttempt) {
+      const project = await projectStore.findProjectById(event.projectId);
+
       if (project.success) {
         try {
-          await notificationService.triggerFailureNotifications(updateResult.data, project.data);
+          await notificationService.triggerFailureNotifications(
+            {
+              ...event,
+              status: "permanently_failed",
+              retryCount: attemptNumber,
+              history: event.history
+            },
+            project.data
+          );
         } catch (err) {
           console.log("Notification trigger failed:", err.message);
         }
       }
-
-      return updateResult;
-    } else {
-      eventLogger.logHistory(result.data, "Retry attempt #" + newRetryCount);
-      return await eventStore.updateEvent(id, { status: "retrying", retryCount: newRetryCount, history: result.data.history });
     }
-  } else {
-    eventLogger.logHistory(result.data, "Processing started");
-    await eventStore.updateEvent(id, { status: "processing", history: result.data.history });
-    eventLogger.logHistory(result.data, "Processing completed");
-    return await eventStore.updateEvent(id, { status: "completed", history: result.data.history });
+
+    throw error;
   }
 }
 

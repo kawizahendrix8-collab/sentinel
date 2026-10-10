@@ -6,7 +6,14 @@ async function createNotification(req, res) {
 
   const result = await notificationService.createNotification(data, userId);
 
-  res.status(201).json(result);
+  if (!result.success) {
+    const status = result.message === "Not authorized" ? 403 :
+      result.message === "Project not found" ? 404 : 400;
+
+    return res.status(status).json(result);
+  }
+
+  return res.status(201).json(result);
 }
 
 async function getNotifications(req, res) {

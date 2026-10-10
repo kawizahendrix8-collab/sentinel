@@ -1,20 +1,19 @@
 const eventQueue = require("../queue/eventQueue.js");
-
 const eventLogger = require("./eventLogger.js");
 
 const eventStore = require("../database/eventStore.js");
 
-  async function createEvent(data,projectId) {
+  async function createEvent(data, projectId, userId) {
   if (!data.source) {
-    return { "success": false, "message": "source is required" };
+    return { success: false, message: "source is required" };
   }
 
   if (!data.type) {
-    return { "success": false, "message": "type is required" };
+    return { success: false, message: "type is required" };
   }
 
   if (!data.payload) {
-    return { "success": false, "message": "payload is required" };
+    return { success: false, message: "payload is required" };
   }
 
   const newEvent = {
@@ -31,13 +30,42 @@ const eventStore = require("../database/eventStore.js");
     receivedAt: new Date()
   };
 
-  eventLogger.logHistory(newEvent, "Event received");
-  await eventStore.addEvent(newEvent);
+ 
+eventLogger.logHistory(newEvent, "Event received");
 
-    await eventQueue.add("process-event", { eventId: newEvent.id }, { attempts: 3, backoff: { type: "fixed", delay: 2000 } });
+const savedEvent = await eventStore.addEvent(newEvent);
 
-  return newEvent;
-} 
+if (!savedEvent.success) {
+  return savedEvent;
+}
+
+try {
+  await eventQueue.add(
+    "process-event",
+    { eventId: newEvent.id },
+    { attempts: 3, backoff: { type: "fixed", delay: 2000 } }
+  );
+} catch (error) {
+  eventLogger.logHistory(newEvent, "Queueing failed");
+
+  try {
+    await eventStore.updateEvent(newEvent.id, {
+      status: "queue_failed",
+      history: newEvent.history
+    });
+  } catch (updateError) {
+    console.error("Failed to record queue failure:", updateError.message);
+  }
+
+  return {
+    success: false,
+    code: "EVENT_QUEUE_FAILED",
+    message: "Event was saved but could not be queued"
+  };
+}
+
+return newEvent;
+}
 
  async function getEvents(filters = {}) {
   return await eventStore.getAllEvents(filters);

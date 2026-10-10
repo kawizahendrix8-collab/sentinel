@@ -3,18 +3,25 @@ const eventProcessor = require("../services/eventProcessor.js");
 const eventService = require("../services/eventService.js");
 
   async function createEvent(req, res) {
-
-    
   const data = req.body;
+
   const projectId = req.project.id;
-    
-  const newEvent = await eventService.createEvent(data,projectId);
+  const userId = req.project.userId;
 
-  res.status(201).json(newEvent);
+  const newEvent = await eventService.createEvent(data, projectId, userId);
 
-};
+  if (!newEvent.success && newEvent.code === "DUPLICATE_EVENT") {
+    return res.status(409).json(newEvent);
+  }
 
-    async function getEvents(req,res){
+  if (!newEvent.success) {
+    return res.status(400).json(newEvent);
+  }
+
+  return res.status(201).json(newEvent);
+}
+
+async function getEvents(req,res){
   
   const events = await
     eventService.getEvents()

@@ -11,6 +11,7 @@ async function createProject(data, userId) {
     };
   }
 
+
   const id = "proj_" + Date.now();
   const apiKey = crypto.randomBytes(32).toString("hex");
 const webhookSecret = "whsec_" + crypto.randomBytes(32).toString("hex");
@@ -24,7 +25,23 @@ const webhookSecret = "whsec_" + crypto.randomBytes(32).toString("hex");
     createdAt: new Date()
   };
 
-  return await projectStore.createProject(newProject);
+  const result = await projectStore.createProject(newProject);
+
+  if (!result.success) {
+    return result;
+  }
+
+  return {
+    success: true,
+    data: {
+      id: result.data.id,
+      userId: result.data.userId,
+      name: result.data.name,
+      apiKey: maskSecret(result.data.apiKey),
+      webhookSecret: maskSecret(result.data.webhookSecret),
+      createdAt: result.data.createdAt
+    }
+  };
 }
 
 
